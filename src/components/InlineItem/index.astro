@@ -1,0 +1,24 @@
+---
+import { readFragment, type FragmentOf } from '~/lib/datocms/graphql';
+import { InlineItemFragment } from './fragments';
+
+interface Props {
+  link: FragmentOf<typeof InlineItemFragment>;
+}
+
+const { link } = Astro.props;
+
+const unmaskedLink = readFragment(InlineItemFragment, link);
+---
+
+{
+  /*
+    If a structured text includes a reference to another DatoCMS
+    record, it's up to you to decide how to render them:
+  */
+  unmaskedLink.__typename === 'PageRecord' && (
+    <a href="/" class="pill">
+      {unmaskedLink.title}
+    </a>
+  )
+}

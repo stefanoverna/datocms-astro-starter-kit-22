@@ -1,0 +1,32 @@
+---
+import type { ItemLink } from 'datocms-structured-text-utils';
+import { readFragment, type FragmentOf } from '~/lib/datocms/graphql';
+import { defaultMetaTransformer } from 'datocms-structured-text-generic-html-renderer';
+import { ItemLinkFragment } from './fragments';
+
+interface Props {
+  node: ItemLink;
+  link: FragmentOf<typeof ItemLinkFragment>;
+}
+
+const { node, link } = Astro.props;
+
+const unmaskedLink = readFragment(ItemLinkFragment, link);
+
+const { meta } = node;
+
+const transformedMeta = meta ? defaultMetaTransformer({ node, meta }) : {};
+---
+
+{
+  /*
+    If the structured text includes a link to another DatoCMS record,
+    it's your decision to determine where the link should lead, or if
+    you wish to customize its appearance:
+  */
+  unmaskedLink.__typename === 'PageRecord' && (
+    <a {...transformedMeta} href="/">
+      <slot />
+    </a>
+  )
+}

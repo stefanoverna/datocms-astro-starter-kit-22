@@ -1,0 +1,47 @@
+---
+import { TagFragment } from '~/lib/datocms/commonFragments';
+import { executeQuery } from '~/lib/datocms/executeQuery';
+import { graphql } from '~/lib/datocms/graphql';
+import { Seo } from '@datocms/astro/Seo';
+
+const query = graphql(
+  /* GraphQL */ `
+    query RootQuery {
+      _site {
+        faviconMetaTags {
+          ...TagFragment
+        }
+      }
+    }
+  `,
+  [TagFragment],
+);
+
+const result = await executeQuery(query);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="generator" content={Astro.generator} />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/datocms/nextjs-starter-kit/src/app/global.css"
+    />
+  </head>
+  <body>
+    <Seo data={result._site.faviconMetaTags} />
+
+    <header>
+      <h1>DatoCMS + Astro Starter Kit</h1>
+      <nav>
+        <a class="navlink" href="https://www.datocms.com/docs/astro"> 📚 Full Integration Guide </a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

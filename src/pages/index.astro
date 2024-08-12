@@ -1,0 +1,96 @@
+---
+import { graphql } from '~/lib/datocms/graphql';
+import Layout from '../layouts/Layout.astro';
+import { TagFragment } from '~/lib/datocms/commonFragments';
+import { executeQuery } from '~/lib/datocms/executeQuery';
+import { Seo } from '@datocms/astro/Seo';
+import { StructuredText } from '@datocms/astro/StructuredText';
+import { BlockFragment } from '~/components/Block/fragments';
+import { ItemLinkFragment } from '~/components/ItemLink/fragments';
+import { InlineItemFragment } from '~/components/InlineItem/fragments';
+
+import {
+  isBlock,
+  isCode,
+  isHeading,
+  isInlineItem,
+  isItemLink,
+} from 'datocms-structured-text-utils';
+
+import Block from '~/components/Block/index.astro';
+import InlineItem from '~/components/InlineItem/index.astro';
+import ItemLink from '~/components/ItemLink/index.astro';
+import HeadingWithAnchorLink from '~/components/HeadingWithAnchorLink/index.astro';
+
+/**
+ * The GraphQL query that will be executed for this route to generate the page
+ * content and metadata.
+ *
+ * Thanks to gql.tada, the result will be fully typed!
+ */
+const query = graphql(
+  /* GraphQL */ `
+    query BasicPageQuery {
+      page {
+        _seoMetaTags {
+          ...TagFragment
+        }
+        title
+        _firstPublishedAt
+        structuredText {
+          value
+          blocks {
+            ... on RecordInterface {
+              id
+              __typename
+            }
+            ...BlockFragment
+          }
+          links {
+            ... on RecordInterface {
+              id
+              __typename
+            }
+            ...ItemLinkFragment
+            ...InlineItemFragment
+          }
+        }
+      }
+    }
+  `,
+  [TagFragment, BlockFragment, ItemLinkFragment, InlineItemFragment],
+);
+
+const { page } = await executeQuery(query);
+
+if (!page) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found',
+  });
+}
+---
+
+<Layout>
+  <Seo data={page._seoMetaTags} />
+
+  <h1>{page.title}</h1>
+  {
+    /*
+     * Structured Text is a JSON format similar to HTML, but with the advantage
+     * of a significantly reduced and tailored set of possible tags
+     * for editorial content, along with the capability to create hyperlinks
+     * to other DatoCMS records and embed custom DatoCMS blocks.
+     */
+  }
+  <StructuredText
+    data={page.structuredText}
+    components={[
+      [isHeading, HeadingWithAnchorLink],
+      [isBlock, Block],
+      [isItemLink, ItemLink],
+      [isInlineItem, InlineItem],
+    ]}
+  />
+  <footer>Published at {page._firstPublishedAt}</footer>
+</Layout>

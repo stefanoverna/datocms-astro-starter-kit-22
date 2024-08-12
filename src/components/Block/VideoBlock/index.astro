@@ -1,0 +1,21 @@
+---
+import { type FragmentOf, readFragment } from '~/lib/datocms/graphql';
+import VideoPlayer from '~/components/VideoPlayer/index.astro';
+import { VideoBlockFragment } from './fragments';
+
+interface Props {
+  data: FragmentOf<typeof VideoBlockFragment>;
+}
+
+const { data } = Astro.props;
+
+// Read unmasked data from fragment
+const unmaskedData = readFragment(VideoBlockFragment, data);
+---
+
+<figure>
+  {/* Render the video player component */}
+  <VideoPlayer data={unmaskedData.asset} />
+  {/* Display the title of the video asset below the video player */}
+  <figcaption>{unmaskedData.asset.title}</figcaption>
+</figure>

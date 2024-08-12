@@ -1,0 +1,25 @@
+---
+import { readFragment, type FragmentOf } from '~/lib/datocms/graphql';
+import ImageBlock from '~/components/Block/ImageBlock/index.astro';
+import ImageGalleryBlock from '~/components/Block/ImageGalleryBlock/index.astro';
+import VideoBlock from '~/components/Block/VideoBlock/index.astro';
+import { BlockFragment } from './fragments';
+
+interface Props {
+  block: FragmentOf<typeof BlockFragment>;
+}
+
+const { block } = Astro.props;
+
+const unmaskedBlock = readFragment(BlockFragment, block);
+---
+
+{
+  unmaskedBlock.__typename === 'ImageBlockRecord' ? (
+    <ImageBlock data={unmaskedBlock} />
+  ) : unmaskedBlock.__typename === 'ImageGalleryBlockRecord' ? (
+    <ImageGalleryBlock data={unmaskedBlock} />
+  ) : unmaskedBlock.__typename === 'VideoBlockRecord' ? (
+    <VideoBlock data={unmaskedBlock} />
+  ) : undefined
+}
