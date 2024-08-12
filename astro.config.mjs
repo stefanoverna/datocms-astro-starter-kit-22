@@ -2,6 +2,7 @@ import { defineConfig, envField } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'server',
   experimental: {
     env: {
       schema: {
@@ -9,8 +10,14 @@ export default defineConfig({
           context: 'client',
           access: 'public',
         }),
-        DATOCMS_DRAFT_CONTENT_CDA_TOKEN: envField.string({ context: 'server', access: 'secret' }),
-        DATOCMS_CMA_TOKEN: envField.string({ context: 'server', access: 'secret' }),
+        DATOCMS_DRAFT_CONTENT_CDA_TOKEN: envField.string({
+          context: 'server',
+          access: 'secret',
+        }),
+        DATOCMS_CMA_TOKEN: envField.string({
+          context: 'server',
+          access: 'secret',
+        }),
       },
       validateSecrets: true,
     },
