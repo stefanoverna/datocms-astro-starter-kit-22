@@ -2,7 +2,6 @@ import { defineConfig, envField } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
   experimental: {
     env: {
       schema: {
