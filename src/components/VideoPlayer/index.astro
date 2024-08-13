@@ -1,6 +1,6 @@
 ---
 import { type FragmentOf, readFragment } from '~/lib/datocms/graphql';
-import { VideoPlayer } from '@datocms/astro/VideoPlayer';
+import { VideoPlayer } from 'react-datocms';
 import { VideoPlayerFragment } from './fragments';
 import type { ComponentProps } from 'astro/types';
 
@@ -22,4 +22,4 @@ const unmaskedData = readFragment(VideoPlayerFragment, data);
   */
 }
 
-<VideoPlayer {...rest} data={unmaskedData.video} accentColor="var(--color-accent)" />
+<VideoPlayer {...rest} data={unmaskedData.video} accentColor="var(--color-accent)" client:visible />
