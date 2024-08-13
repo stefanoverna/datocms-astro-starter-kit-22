@@ -3,8 +3,14 @@ import { TagFragment } from '~/lib/datocms/commonFragments';
 import { executeQuery } from '~/lib/datocms/executeQuery';
 import { graphql } from '~/lib/datocms/graphql';
 import DraftModeToggler from '~/components/DraftModeToggler/index.astro';
-import { Seo } from '@datocms/astro';
+import { Seo, type TitleMetaLinkTag } from '@datocms/astro';
 import { isDraftModeEnabled } from '~/lib/draftMode';
+
+type Props = {
+  additionalSeo?: TitleMetaLinkTag[];
+};
+
+const { additionalSeo = [] } = Astro.props;
 
 const query = graphql(
   /* GraphQL */ `
@@ -32,10 +38,9 @@ const result = await executeQuery(query, { includeDrafts: draftModeEnabled });
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/datocms/nextjs-starter-kit/src/app/global.css"
     />
+    <Seo data={[...result._site.faviconMetaTags, ...additionalSeo]} />
   </head>
   <body>
-    <Seo data={result._site.faviconMetaTags} />
-
     <header>
       <h1>DatoCMS + Astro Starter Kit</h1>
       <nav>

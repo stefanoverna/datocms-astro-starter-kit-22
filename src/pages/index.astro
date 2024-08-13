@@ -3,7 +3,7 @@ import { graphql } from '~/lib/datocms/graphql';
 import Layout from '../layouts/Layout.astro';
 import { TagFragment } from '~/lib/datocms/commonFragments';
 import { executeQuery } from '~/lib/datocms/executeQuery';
-import { Seo, StructuredText } from '@datocms/astro';
+import { StructuredText } from '@datocms/astro';
 import { BlockFragment } from '~/components/Block/fragments';
 import { ItemLinkFragment } from '~/components/ItemLink/fragments';
 import { InlineItemFragment } from '~/components/InlineItem/fragments';
@@ -68,9 +68,7 @@ if (!page) {
 }
 ---
 
-<Layout>
-  <Seo data={page._seoMetaTags} />
-
+<Layout additionalSeo={page._seoMetaTags}>
   <h1>{page.title}</h1>
   {
     /*
