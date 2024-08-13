@@ -9,8 +9,8 @@ export default defineConfig({
     env: {
       schema: {
         DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN: envField.string({
-          context: 'client',
-          access: 'public',
+          context: 'server',
+          access: 'secret',
         }),
         DATOCMS_DRAFT_CONTENT_CDA_TOKEN: envField.string({
           context: 'server',

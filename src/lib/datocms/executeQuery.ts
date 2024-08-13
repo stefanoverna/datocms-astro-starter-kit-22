@@ -1,6 +1,8 @@
 import { executeQuery as libExecuteQuery } from '@datocms/cda-client';
-import { DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN } from 'astro:env/client';
-import { DATOCMS_DRAFT_CONTENT_CDA_TOKEN } from 'astro:env/server';
+import {
+  DATOCMS_DRAFT_CONTENT_CDA_TOKEN,
+  DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN,
+} from 'astro:env/server';
 import type { TadaDocumentNode } from 'gql.tada';
 
 /**

@@ -3,7 +3,7 @@ import { graphql } from '~/lib/datocms/graphql';
 import Layout from '../layouts/Layout.astro';
 import { TagFragment } from '~/lib/datocms/commonFragments';
 import { executeQuery } from '~/lib/datocms/executeQuery';
-import { QueryListener, Seo, StructuredText } from '@datocms/astro';
+import { Seo, StructuredText } from '@datocms/astro';
 import { BlockFragment } from '~/components/Block/fragments';
 import { ItemLinkFragment } from '~/components/ItemLink/fragments';
 import { InlineItemFragment } from '~/components/InlineItem/fragments';
@@ -14,8 +14,9 @@ import Block from '~/components/Block/index.astro';
 import InlineItem from '~/components/InlineItem/index.astro';
 import ItemLink from '~/components/ItemLink/index.astro';
 import HeadingWithAnchorLink from '~/components/HeadingWithAnchorLink/index.astro';
+import DraftModeQueryListener from '~/components/DraftModeQueryListener/index.astro';
 
-import { DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN } from 'astro:env/client';
+import { isDraftModeEnabled } from '~/lib/draftMode';
 
 /**
  * The GraphQL query that will be executed for this route to generate the page
@@ -56,7 +57,8 @@ const query = graphql(
   [TagFragment, BlockFragment, ItemLinkFragment, InlineItemFragment],
 );
 
-const { page } = await executeQuery(query);
+const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
+const { page } = await executeQuery(query, { includeDrafts: draftModeEnabled });
 
 if (!page) {
   return new Response(null, {
@@ -89,5 +91,5 @@ if (!page) {
   />
   <footer>Published at {page._firstPublishedAt}</footer>
 
-  <QueryListener query={query} token={DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN} excludeInvalid />
+  <DraftModeQueryListener query={query} />
 </Layout>
