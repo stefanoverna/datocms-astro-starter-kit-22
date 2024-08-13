@@ -3,8 +3,7 @@ import { graphql } from '~/lib/datocms/graphql';
 import Layout from '../layouts/Layout.astro';
 import { TagFragment } from '~/lib/datocms/commonFragments';
 import { executeQuery } from '~/lib/datocms/executeQuery';
-import { Seo } from '@datocms/astro/Seo';
-import { StructuredText } from '@datocms/astro/StructuredText';
+import { QueryListener, Seo, StructuredText } from '@datocms/astro';
 import { BlockFragment } from '~/components/Block/fragments';
 import { ItemLinkFragment } from '~/components/ItemLink/fragments';
 import { InlineItemFragment } from '~/components/InlineItem/fragments';
@@ -15,6 +14,8 @@ import Block from '~/components/Block/index.astro';
 import InlineItem from '~/components/InlineItem/index.astro';
 import ItemLink from '~/components/ItemLink/index.astro';
 import HeadingWithAnchorLink from '~/components/HeadingWithAnchorLink/index.astro';
+
+import { DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN } from 'astro:env/client';
 
 /**
  * The GraphQL query that will be executed for this route to generate the page
@@ -87,4 +88,6 @@ if (!page) {
     ]}
   />
   <footer>Published at {page._firstPublishedAt}</footer>
+
+  <QueryListener query={query} token={DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN} excludeInvalid />
 </Layout>

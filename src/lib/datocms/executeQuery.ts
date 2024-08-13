@@ -1,9 +1,7 @@
-import { buildRequestInit, executeQuery as libExecuteQuery } from '@datocms/cda-client';
+import { executeQuery as libExecuteQuery } from '@datocms/cda-client';
 import { DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN } from 'astro:env/client';
 import { DATOCMS_DRAFT_CONTENT_CDA_TOKEN } from 'astro:env/server';
 import type { TadaDocumentNode } from 'gql.tada';
-
-export const cacheTag = 'datocms';
 
 /**
  * Executes a GraphQL query using the DatoCMS Content Delivery API, and caches
@@ -13,7 +11,6 @@ export async function executeQuery<Result, Variables>(
   query: TadaDocumentNode<Result, Variables>,
   options?: ExecuteQueryOptions<Variables>,
 ) {
-  buildRequestInit;
   const result = await libExecuteQuery(query, {
     variables: options?.variables,
     excludeInvalid: true,

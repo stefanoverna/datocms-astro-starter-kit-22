@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'server',
   experimental: {
     env: {
       schema: {
@@ -18,6 +19,18 @@ export default defineConfig({
         DATOCMS_CMA_TOKEN: envField.string({
           context: 'server',
           access: 'secret',
+        }),
+        SECRET_API_TOKEN: envField.string({
+          context: 'server',
+          access: 'secret',
+        }),
+        SIGNED_COOKIE_JWT_SECRET: envField.string({
+          context: 'server',
+          access: 'secret',
+        }),
+        DRAFT_MODE_COOKIE_NAME: envField.string({
+          context: 'client',
+          access: 'public',
         }),
       },
       validateSecrets: true,
